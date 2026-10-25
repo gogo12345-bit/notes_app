@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <div id="only">
+        Loading...
+        <input type="text" placeholder="Type" id="userNote">
+        <button onclick="addTodo()">Create a node</button>
+    </div>
+    <script>
+        async function addTodo(){
+            //here, we will display/POST all the todos in the browser
+            //post in backend: -
+            const response = await axios.post("http://localhost:3000/note", {
+                note: document.getElementById("userNote").value
+            });
+            //post in frontend: -
+            const newNote = document.createElement("div");
+            newNote.innerHTML = document.getElementById("userNote").value;
+            document.getElementById("only").appendChild(newNote);
+        }
+        async function getTodos(){
+            //here, we will GET all the created notes in a local database
+            const response = await axios.get("http://localhost:3000/note");
+            const notes = response.data.notes;
+            document.getElementById("only").innerHTML = "";
+            for(let i = 0; i < notes.length; i++){
+                const note = document.createElement("div");
+                note.innerHTML = notes[i];
+                document.getElementById("only").appendChild(note);
+            }
+        }
+        getTodos();
+    </script>
+</body>
+</html>
